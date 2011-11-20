@@ -41,6 +41,9 @@ public:
   DateTime nowDateTime(void) const;
 };
 
+/**
+ * Singleton instance for general use
+ */
 extern AnyRtc RTC;
 
 /**

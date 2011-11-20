@@ -22,16 +22,29 @@ using namespace std;
 
 class AnyRtcTestSuite: public CxxTest::TestSuite
 {
+  struct TestRtc: public IRTC
+  {
+    uint32_t value;
+    int begin_called;
+    TestRtc(void): value(0), begin_called(0) {}
+    virtual uint8_t begin(void) { value = 0; ++begin_called; return true; }
+    virtual void adjust(uint32_t _v) { value = _v; }
+    virtual uint32_t now(void) const { return value; }
+  };
+
   AnyRtc* pAnyRtc ;
+  TestRtc* pTestRtc ;
 public:
   void setUp()
   {
     pAnyRtc = new AnyRtc();
+    pTestRtc = new TestRtc();
     pAnyRtc->begin();
   }
   
   void tearDown()
   {
+    delete pTestRtc;
     delete pAnyRtc;
   }
 
@@ -78,6 +91,28 @@ public:
     delay( 1000 * elapsed );
 
     TS_ASSERT_EQUALS( RTC.now(), tval + elapsed );
+  }
+  void testOverride( void )
+  {
+    RTC.begin( pTestRtc ); 
+    
+    TS_ASSERT_EQUALS( pTestRtc->begin_called, 1 ); 
+  }
+  void testOverrideSet( void )
+  {
+    const uint32_t tval = 123456;
+    RTC.begin( pTestRtc );
+    RTC.adjust( tval );
+
+    TS_ASSERT_EQUALS( pTestRtc->value, tval ); 
+  }
+  void testOverrideGet( void )
+  {
+    const uint32_t tval = 7891011;
+    RTC.begin( pTestRtc );
+    pTestRtc->value = tval;
+
+    TS_ASSERT_EQUALS( RTC.now(), tval ); 
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
