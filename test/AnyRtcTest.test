@@ -27,6 +27,7 @@ public:
   void setUp()
   {
     pAnyRtc = new AnyRtc();
+    pAnyRtc->begin();
   }
   
   void tearDown()
@@ -36,8 +37,31 @@ public:
 
   void testEmpty( void )
   {
-    cerr << "hello";
     TS_ASSERT(pAnyRtc);
+  }
+
+  void testGetSet( void )
+  {
+    const uint32_t tval = 123456;
+    pAnyRtc->adjust( tval );
+
+    TS_ASSERT_EQUALS( pAnyRtc->now(), tval );
+  }
+  void testGetSetDateTime( void )
+  {
+    DateTime dt(2011,12,1,2,3,4);
+    pAnyRtc->adjust( dt );
+
+    TS_ASSERT_EQUALS( pAnyRtc->nowDateTime().unixtime(), dt.unixtime() );
+  }
+  void testElapsedTime( void )
+  {
+    const uint32_t tval = 123456;
+    const uint32_t elapsed = 10;
+    pAnyRtc->adjust( tval );
+    delay( 1000 * elapsed );
+
+    TS_ASSERT_EQUALS( pAnyRtc->now(), tval + elapsed );
   }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp
