@@ -1,0 +1,12 @@
+SubDir TOP ;
+
+HDRS += $(CXXTEST_DIR) ;
+
+SOURCE_GRIST = ;
+LOCATE_SOURCE = out ;
+LOCATE_TARGET = out ;
+
+TestRoot runner.cpp ;
+Main Tests : runner.cpp $(INTERNAL_MODULES) $(MOCK_MODULES) $(TEST_MODULES) $(NATIVE_MODULES) $(SKETCH_MODULES) $(LIBRARY_MODULES) $(CORE_MODULES) ;
+RunTest result : Tests ;
+Coverage coverage : $(SKETCH_MODULES) $(SKETCH_CLASS_MODULES) ;

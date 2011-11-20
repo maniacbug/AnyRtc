@@ -1,0 +1,41 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
+// STL headers
+#include <vector>
+#include <string>
+// C headers
+// Framework headers
+// Library headers
+#include <cxxtest/TestSuite.h>
+// Project headers
+// This component's header
+#include <AnyRtc.h>
+
+using namespace std;
+
+class AnyRtcTestSuite: public CxxTest::TestSuite
+{
+  AnyRtc* pAnyRtc ;
+public:
+  void setUp()
+  {
+    pAnyRtc = new AnyRtc();
+  }
+  
+  void tearDown()
+  {
+    delete pAnyRtc;
+  }
+
+  void testEmpty( void )
+  {
+    TS_ASSERT(pAnyRtc);
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
