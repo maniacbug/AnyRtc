@@ -4,10 +4,10 @@ INTERNAL_DIR	= $(CORE_DIR)/internal ;
 EXTRAS_DIR	= $(CORE_DIR)/extras ;
 LIB_DIRS	= $(HOME)/Source/Arduino/libraries ;
 
-SKETCH_DIR	= $(PWD:D) ;
-NATIVE_DIR	= $(PWD) ;
-TEST_DIR	= $(PWD)/test ;
-PROJECT_LIBS 	= Tictocs ; 
+SKETCH_DIR	= sketch ;
+NATIVE_DIR	= native ;
+TEST_DIR	= $(PWD) ;
+PROJECT_LIBS 	= AnyRtc ; 
 
 HDRS		+= $(SKETCH_DIR) $(NATIVE_DIR) $(INTERNAL_DIR) $(CORE_DIR) $(LIB_DIRS)/$(PROJECT_LIBS) ;
 DEFINES		+= NATIVE=1 VERSION_H ;
@@ -15,11 +15,11 @@ DEFINES		+= NATIVE=1 VERSION_H ;
 CORE_MODULES	= [ GLOB $(CORE_DIR) : *.cpp ] ; 
 INTERNAL_MODULES = [ GLOB $(INTERNAL_DIR) : *.cpp ] ;
 TEST_MODULES	= [ GLOB $(TEST_DIR) : *Test.test *.cpp ] ;
-MOCK_MODULES	= $(EXTRAS_DIR)/readline.cpp $(EXTRAS_DIR)/mock_time.cpp ;
+MOCK_MODULES	= $(EXTRAS_DIR)/setuploop.cpp $(EXTRAS_DIR)/readline.cpp $(EXTRAS_DIR)/mock_time.cpp ;
 SKETCH_CLASS_MODULES = [ GLOB $(SKETCH_DIR) : *.cpp ] ; 
 LIBRARY_MODULES	= [ GLOB $(LIB_DIRS)/$(PROJECT_LIBS) : *.cpp ] ;
 SKETCH_MODULES	= [ GLOB $(SKETCH_DIR) : *.ino *.pde ] ;
-NATIVE_MODULES	= [ GLOB $(PWD) : *.cpp ] ;
+NATIVE_MODULES	= [ GLOB $(NATIVE_DIR) : *.cpp ] ;
 
 CXXTEST_GEN	= $(CXXTEST_DIR)/cxxtestgen.py ;
 LINK		= c++ ;
