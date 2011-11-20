@@ -15,6 +15,7 @@
 #include <AnyRtc.h>
 
 static RTC_millis RTC_millis_internal;
+AnyRtc RTC;
 
 /****************************************************************************/
 

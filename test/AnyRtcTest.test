@@ -63,5 +63,21 @@ public:
 
     TS_ASSERT_EQUALS( pAnyRtc->now(), tval + elapsed );
   }
+  void testStaticGetSet( void )
+  {
+    const uint32_t tval = 123456;
+    RTC.adjust( tval );
+
+    TS_ASSERT_EQUALS( RTC.now(), tval );
+  }
+  void testStaticElapsedTime( void )
+  {
+    const uint32_t tval = 123456;
+    const uint32_t elapsed = 10;
+    RTC.adjust( tval );
+    delay( 1000 * elapsed );
+
+    TS_ASSERT_EQUALS( RTC.now(), tval + elapsed );
+  }
 };
 // vim:cin:ai:sts=2 sw=2 ft=cpp

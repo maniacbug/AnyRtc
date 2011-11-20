@@ -41,7 +41,7 @@ public:
   DateTime nowDateTime(void) const;
 };
 
-//TODO: extern AnyRtc RTC;
+extern AnyRtc RTC;
 
 /**
  * Simple general-purpose date/time class (no TZ / DST / leap second handling!)
@@ -129,6 +129,7 @@ public:
   }
   virtual uint8_t begin(void)
   {
+    time_at_zero = 0;
     return true;
   }
   virtual void adjust(uint32_t tv)
