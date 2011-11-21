@@ -22,7 +22,7 @@ protected:
     void cs(int _value) const;
 
 private:
-    int cs_pin;
+    uint8_t cs_pin;
 };
 
 #endif // __RTC_DS3234_H__

@@ -14,7 +14,7 @@ public:
     uint8_t begin(void);
     void adjust(const DateTime& dt);
     uint8_t isrunning(void);
-    DateTime now();
+    DateTime nowDateTime(void) const;
     void adjust(uint32_t tv) { adjust(DateTime(tv)); }
     uint32_t now(void) const { return nowDateTime().unixtime(); }
 };

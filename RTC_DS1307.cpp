@@ -64,7 +64,7 @@ void RTC_DS1307::adjust(const DateTime& dt)
     Wire.endTransmission();
 }
 
-DateTime RTC_DS1307::now()
+DateTime RTC_DS1307::nowDateTime(void) const
 {
     Wire.beginTransmission(DS1307_ADDRESS);
     Wire.SEND(0);
