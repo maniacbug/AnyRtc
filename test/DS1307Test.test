@@ -1,0 +1,84 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
+// STL headers
+#include <vector>
+#include <string>
+#include <iostream>
+// C headers
+// Framework headers
+// Library headers
+#include <cxxtest/TestSuite.h>
+// Project headers
+#include <Globals.h>
+// This component's header
+#include <RTC_DS1307.h>
+
+using namespace std;
+
+extern ostream& operator<<(ostream& os, const Logger& log);
+
+class RTC_DS1307TestSuite: public CxxTest::TestSuite
+{
+  RTC_DS1307* pRTC_DS1307 ;
+public:
+  void setUp()
+  {
+    theLogger.clear();
+    //theWireQueue.clear();
+
+    pRTC_DS1307 = new RTC_DS1307();
+  }
+  
+  void tearDown()
+  {
+    delete pRTC_DS1307;
+  }
+
+  void testEmpty( void )
+  {
+    TS_ASSERT(pRTC_DS1307);
+  }
+
+  void testIsRunning( void )
+  {
+    theWireQueue.hwEnqueue(0);
+    uint8_t running = pRTC_DS1307->isrunning();
+  
+    //cerr << theLogger;
+
+    TS_ASSERT( running );
+  }
+  void testAdjust( void )
+  {
+    pRTC_DS1307->adjust(DateTime(2001,7,8,9,10,11));
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("end 11"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("end 10"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("end 09"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("end 08"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("end 07"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("end 01"), 1 );
+  }
+  void todo_testNow( void )
+  {
+    DateTime dt(2011,12,1,20,30,45);
+    theWireQueue.hwEnqueue(0x45);
+    theWireQueue.hwEnqueue(0x30);
+    theWireQueue.hwEnqueue(0x20);
+    theWireQueue.hwEnqueue(0x00);
+    theWireQueue.hwEnqueue(0x01);
+    theWireQueue.hwEnqueue(0x12);
+    theWireQueue.hwEnqueue(0x11);
+
+    DateTime result = pRTC_DS1307->nowDateTime();
+
+    TS_ASSERT_EQUALS( dt.unixtime(), result.unixtime() );
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
