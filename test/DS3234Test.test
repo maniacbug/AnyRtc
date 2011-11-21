@@ -1,0 +1,106 @@
+/*
+ Copyright (C) 2011 J. Coliz <maniacbug@ymail.com>
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ version 2 as published by the Free Software Foundation.
+ */
+
+// STL headers
+#include <vector>
+#include <string>
+#include <iostream>
+#include <iterator>
+// C headers
+// Framework headers
+// Library headers
+#include <cxxtest/TestSuite.h>
+// Project headers
+#include <Globals.h>
+// This component's header
+#include <RTC_DS3234.h>
+
+using namespace std;
+
+ostream& operator<<(ostream& os, const Logger& log)
+{
+  copy(log.begin(),log.end(),ostream_iterator<string>(os," "));
+  return os;
+}
+
+class RTC_DS3234TestSuite: public CxxTest::TestSuite
+{
+  RTC_DS3234* pRTC_DS3234 ;
+public:
+  void setUp()
+  {
+    theLogger.clear();
+    theSpiQueue.clear();
+
+    pRTC_DS3234 = new RTC_DS3234(10);
+  }
+  
+  void tearDown()
+  {
+    delete pRTC_DS3234;
+  }
+
+  void testEmpty( void )
+  {
+    TS_ASSERT(pRTC_DS3234);
+  }
+  void testBegin( void )
+  {
+    theSpiQueue.hwEnqueue(0xff);
+    theSpiQueue.hwEnqueue(0xff);
+    theSpiQueue.hwEnqueue(0xff);
+    theSpiQueue.hwEnqueue(0xff);
+    pRTC_DS3234->begin();
+    //cerr << theLogger;
+
+    TS_ASSERT_EQUALS( theLogger.lines_contain("in 8e"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("in 8f"), 1 );
+  }
+  void testIsRunning( void )
+  {
+    theSpiQueue.hwEnqueue(0xff);
+    theSpiQueue.hwEnqueue(0);
+    uint8_t running = pRTC_DS3234->isrunning();
+  
+    //cerr << theLogger;
+
+    TS_ASSERT( running );
+  }
+  void testAdjust( void )
+  {
+    int i=8;
+    while (i--)
+      theSpiQueue.hwEnqueue(0xff);
+    pRTC_DS3234->adjust(DateTime(2001,7,8,9,10,11));
+    //cerr << theLogger;
+    TS_ASSERT_EQUALS( theLogger.lines_contain("in 80"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("in 11"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("in 10"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("in 09"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("in 08"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("in 07"), 1 );
+    TS_ASSERT_EQUALS( theLogger.lines_contain("in 01"), 1 );
+  }
+  void testNow( void )
+  {
+    DateTime dt(2011,12,1,20,30,45);
+    theSpiQueue.hwEnqueue(0xff);
+    theSpiQueue.hwEnqueue(0x45);
+    theSpiQueue.hwEnqueue(0x30);
+    theSpiQueue.hwEnqueue(0x20);
+    theSpiQueue.hwEnqueue(0x00);
+    theSpiQueue.hwEnqueue(0x01);
+    theSpiQueue.hwEnqueue(0x12);
+    theSpiQueue.hwEnqueue(0x11);
+
+    DateTime result = pRTC_DS3234->nowDateTime();
+
+    TS_ASSERT_EQUALS( dt.unixtime(), result.unixtime() );
+  }
+};
+// vim:cin:ai:sts=2 sw=2 ft=cpp
