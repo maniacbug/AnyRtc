@@ -32,7 +32,7 @@ inline uint8_t bin2bcd (uint8_t val)
 {
     return val + 6 * (val / 10);
 }
-#if 0
+
 uint8_t RTC_DS1307::begin(void)
 {
     return 1;
@@ -50,7 +50,7 @@ uint8_t RTC_DS1307::isrunning(void)
 }
 
 void RTC_DS1307::adjust(const DateTime& dt)
-{
+ {
     Wire.beginTransmission(DS1307_ADDRESS);
     Wire.SEND(0);
     Wire.SEND(bin2bcd(dt.second()));
@@ -81,6 +81,5 @@ DateTime RTC_DS1307::now()
 
     return DateTime (y, m, d, hh, mm, ss);
 }
-#endif
 
 // vim:ci:sw=4 sts=4 ft=cpp
