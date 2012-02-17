@@ -17,7 +17,7 @@ int i = 0; //The new wire library needs to take an int when you are sending for 
 ////////////////////////////////////////////////////////////////////////////////
 // utility code, some of this could be exposed in the DateTime API if needed
 
-static const prog_uint8_t daysInMonth[] PROGMEM = { 31,28,31,30,31,30,31,31,30,31,30,31 };
+static const uint8_t daysInMonth[] PROGMEM = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
 // number of days since 2000/01/01, valid for 2001..2099
 static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d)
@@ -153,7 +153,7 @@ uint32_t DateTime::unixtime(void) const
     return t;
 }
 
-const prog_char prog_months[] PROGMEM = "JanFebMarAprMayJunJulAugSepOctNovDec";
+const char prog_months[] PROGMEM = "JanFebMarAprMayJunJulAugSepOctNovDec";
 
 // as a string
 char* DateTime::toString(char* buf, int maxlen) const
