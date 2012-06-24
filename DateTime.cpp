@@ -29,7 +29,10 @@ static uint16_t date2days(uint16_t y, uint8_t m, uint8_t d)
         days += pgm_read_byte(daysInMonth + i - 1);
     if (m > 2 && y % 4 == 0)
         ++days;
-    return days + 365 * y + (y + 3) / 4 - 1;
+    if (y)
+        return days + 365 * y + (y + 3) / 4 - 1;
+    else
+        return days;
 }
 
 static long time2long(uint16_t days, uint8_t h, uint8_t m, uint8_t s)
@@ -148,7 +151,8 @@ uint32_t DateTime::unixtime(void) const
     uint32_t t;
     uint16_t days = date2days(yOff, m, d);
     t = time2long(days, hh, mm, ss);
-    t += SECONDS_FROM_1970_TO_2000;  // seconds from 1970 to 2000
+    if ( yOff)
+        t += SECONDS_FROM_1970_TO_2000;  // seconds from 1970 to 2000
 
     return t;
 }
